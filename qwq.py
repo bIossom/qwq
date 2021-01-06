@@ -31,22 +31,13 @@ async def on_message(message):
 async def on_raw_reaction_add(payload):
 	channel = await client.fetch_channel(payload.channel_id)
 	timestamp = strftime("%Y-%m-%d %H:%M:%S", localtime())
-	if isinstance(channel, discord.TextChannel):
-		async for msg in channel.history(limit=99999):
-			if msg.author == client.user:
-				try:
-					await msg.delete()
-					print(f"[{timestamp}] Deleting '{msg.id}' + '{msg.content}'")
-				except:
-					pass
-	elif isinstance(channel, discord.DMChannel):
-		async for msg in channel.history(limit=99999):
-			if msg.author == client.user:
-				try:
-					await msg.delete()
-					print(f"[{timestamp}] Removed '{msg.content} ({msg.id})' sent by you")
-				except:
-					pass
+	async for msg in channel.history(limit=99999):
+		if msg.author == client.user:
+			try:
+				await msg.delete()
+				print(f"[{timestamp}] Deleting '{msg.id}' + '{msg.content}'")
+			except:
+				pass
 
 if __name__ == "__main__":
 	if not token: # Checks to see if the token variable is empty
