@@ -17,7 +17,16 @@ async def on_ready():
 @client.event
 async def on_message(message):
 	# implemented from micah's selfbot | cleardms (https://github.com/girl/owo/blob/master/owo.py)
-	if message.content.startswith(".melvinscat"):
+	commands = []
+	z = 0
+	for index, a in enumerate(message.content):
+		if a == " ":
+			commands.append(message.content[z:index])
+			z = index + 1
+	commands.append(message.content[z:])
+	channel = message.channel
+
+	if commands[0] == ".melvinscat":
 		if message.author == client.user:
 			for channel in client.private_channels:
 				if isinstance(channel, discord.DMChannel):
@@ -31,7 +40,7 @@ async def on_message(message):
 							logging.critical(x)
 							pass
 
-	if message.content.startswith(".save"): # .save 9999 > file_name
+	if commands[0] == ".save": # .save 9999 > file_name
 		if message.author == client.user:
 			split = message.content.split(" ")
 			filename = split[3]
@@ -57,9 +66,9 @@ async def save_msgs(message, filename, limit):
 				export_file.write(f"{msg.created_at} - {msg.author.id} / {msg.id} <{msg.author}> {msg.content}\n")
 			print(f"{timestamp} - LOGGED - {msg.author.id} / {msg.id} <{msg.author}> {msg.content}")
 		except Exception as x:
-		 	logging.basicConfig(format="%(asctime)s - %(levelname)s - %(message)s", datefmt="%m/%d/%Y %I:%M:%S %p")
-		 	logging.critical(x)
-		 	pass
+			logging.basicConfig(format="%(asctime)s - %(levelname)s - %(message)s", datefmt="%m/%d/%Y %I:%M:%S %p")
+			logging.critical(x)
+			pass
 
 # validate if file exist, if not create it
 def check_file(file):
