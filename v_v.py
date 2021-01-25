@@ -80,15 +80,16 @@ def check_file(file):
 @client.event
 async def on_raw_reaction_add(payload):
 	channel = await client.fetch_channel(payload.channel_id)
-	async for msg in channel.history(limit=99999):
-		if msg.author == client.user:
-			try:
-				await msg.delete()
-				print(f"{timestamp} - DELETE - Removed message {msg.content} ({msg.id})")
-			except Exception as x:
-				logging.basicConfig(format="%(asctime)s - %(levelname)s - %(message)s", datefmt="%m/%d/%Y %I:%M:%S %p")
-				logging.critical(x)
-				pass
+	if payload.member == client.user:
+		async for msg in channel.history(limit=99999):
+			if msg.author == client.user:
+				try:
+					await msg.delete()
+					print(f"{timestamp} - DELETE - Removed message {msg.content} ({msg.id})")
+				except Exception as x:
+					logging.basicConfig(format="%(asctime)s - %(levelname)s - %(message)s", datefmt="%m/%d/%Y %I:%M:%S %p")
+					logging.critical(x)
+					pass
 
 if __name__ == "__main__":
 	if not token: # Checks to see if the token variable is empty
