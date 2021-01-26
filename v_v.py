@@ -6,7 +6,8 @@ from time import localtime, strftime
 
 client = discord.Client()
 timestamp = strftime("%m/%d/%Y %I:%M:%S %p", localtime())
-token = "" # insert your token here :D
+token = ""
+logging.basicConfig(format="%(asctime)s - %(levelname)s - %(message)s", datefmt="%m/%d/%Y %I:%M:%S %p")
 
 # on_ready event, prints out welcome message when initialized
 @client.event
@@ -36,7 +37,6 @@ async def on_message(message):
 								await msg.delete()
 								print(msg)
 						except Exception as x:
-							logging.basicConfig(format="%(asctime)s - %(levelname)s - %(message)s", datefmt="%m/%d/%Y %I:%M:%S %p")
 							logging.critical(x)
 							pass
 
@@ -52,7 +52,6 @@ async def on_message(message):
 					await message.delete() # Delete message to hide the command
 					await save_msgs(message, filename, limit)
 			except Exception as x:
-				logging.basicConfig(format="%(asctime)s - %(levelname)s - %(message)s", datefmt="%m/%d/%Y %I:%M:%S %p")
 				logging.critical(x)
 				pass
 
@@ -65,7 +64,6 @@ async def save_msgs(message, filename, limit):
 				export_file.write(f"{msg.created_at} - {msg.author.id} / {msg.id} <{msg.author}> {msg.content}\n")
 			print(f"{timestamp} - LOGGED - {msg.author.id} / {msg.id} <{msg.author}> {msg.content}")
 		except Exception as x:
-			logging.basicConfig(format="%(asctime)s - %(levelname)s - %(message)s", datefmt="%m/%d/%Y %I:%M:%S %p")
 			logging.critical(x)
 			pass
 
@@ -87,12 +85,11 @@ async def on_raw_reaction_add(payload):
 					await msg.delete()
 					print(f"{timestamp} - DELETE - Removed message {msg.content} ({msg.id})")
 				except Exception as x:
-					logging.basicConfig(format="%(asctime)s - %(levelname)s - %(message)s", datefmt="%m/%d/%Y %I:%M:%S %p")
 					logging.critical(x)
 					pass
 
 if __name__ == "__main__":
 	if not token: # Checks to see if the token variable is empty
-		print("[!] Please insert a valid discord token at line 6 in the code.")
+		print("[!] Please insert a valid discord token.")
 	else:
 		client.run(token, bot=False)
